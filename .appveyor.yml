@@ -85,4 +85,4 @@ build_script:
     %VC_BUILD% cmake --build . --config Release
   # MSYS2
   - |-
-    %MSYS2_BUILD% %MSYS2_BASH% "cd $APPVEYOR_BUILD_FOLDER/build && cmake -G 'MSYS Makefiles' .. && make"
+    %MSYS2_BUILD% %MSYS2_BASH% "cd $APPVEYOR_BUILD_FOLDER/build && /mingw64/bin/cmake -G 'MSYS Makefiles' .. && make"
