@@ -70,12 +70,7 @@ install:
     %MSVC% %DEP% copy mxml-2.10\vcnet\*.dll %PREFIX%\bin > nul
   # MSYS2
   - |-
-    rem %MSYS2% %MSYS2_BASH% "pacman -Syu --noconfirm pacman pacman-mirrors"
-    %MSYS2% %MSYS2_BASH% "pacman -S --needed --noconfirm flex bison"
-    %MSYS2% %MSYS2_BASH% "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain mingw-w64-x86_64-cmake mingw-w64-x86_64-SDL mingw-w64-x86_64-SDL_image mingw-w64-x86_64-SDL_mixer mingw-w64-x86_64-glew"
-  # Temporary fix for missing cmake dep
-  - |-
-    %MSYS2% %MSYS2_BASH% "pacman -S --needed --noconfirm mingw-w64-x86_64-libidn2"
+    %MSYS2% %MSYS2_BASH% "pacman -S --needed --noconfirm flex mingw-w64-x86_64-cmake mingw-w64-x86_64-SDL mingw-w64-x86_64-SDL_image mingw-w64-x86_64-SDL_mixer mingw-w64-x86_64-glew"
   # Build mxml
   - |-
     %MSYS2% %DEP% appveyor DownloadFile https://github.com/michaelrsweet/mxml/releases/download/release-2.10/mxml-2.10.tar.gz
