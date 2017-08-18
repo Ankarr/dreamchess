@@ -3,7 +3,7 @@ environment:
   VC_PREFIX: C:\vc-libs
   MSYS2_PREFIX: C:\msys2-libs
   matrix:
-    - COMPILER: msvc
+#    - COMPILER: msvc
     - COMPILER: msys2
       MSYS2_BASH: C:\msys64\usr\bin\bash -lc
 cache:
@@ -79,12 +79,11 @@ install:
 build_script:
   - |-
     mkdir %APPVEYOR_BUILD_FOLDER%\build
-    cd %APPVEYOR_BUILD_FOLDER%\build
   # Visual Studio
   - |-
+    %VC_BUILD% cd %APPVEYOR_BUILD_FOLDER%\build
     %VC_BUILD% cmake -DCMAKE_PREFIX_PATH=%VC_PREFIX% -DCMAKE_PROGRAM_PATH=%VC_PREFIX%\win_flex_bison ..
     %VC_BUILD% cmake --build . --config Release
   # MSYS2
   - |-
-    %MSYS2_BUILD% %MSYS2_BASH% cmake -G "MSYS Makefiles" ..
-    %MSYS2_BUILD% %MSYS2_BASH% make
+    %MSYS2_BUILD% %MSYS2_BASH% "cd $APPVEYOR_BUILD_FOLDER/build && cmake -G 'MSYS Makefiles' .. && make"
