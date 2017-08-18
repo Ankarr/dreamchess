@@ -3,9 +3,9 @@ environment:
   VC_PREFIX: C:\vc-libs
   MSYS2_PREFIX: C:\msys2-libs
   matrix:
-#    - COMPILER: msvc
     - COMPILER: msys2
       MSYS2_BASH: C:\msys64\usr\bin\bash -lc
+#    - COMPILER: msvc
 cache:
   - '%VC_PREFIX%'
   - '%MSYS2_PREFIX%'
