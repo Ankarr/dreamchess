@@ -8,9 +8,9 @@ environment:
       MSYS2_PACMAN: C:\msys64\var\cache\pacman\pkg
       MSYS2_BASH: C:\msys64\usr\bin\bash -lc
 cache:
-  - %VC_PREFIX%
-  - %MSYS2_PREFIX%
-  - %MSYS2_PACMAN%
+  - '%VC_PREFIX%'
+  - '%MSYS2_PREFIX%'
+  - '%MSYS2_PACMAN%'
 install:
   - |-
     if %COMPILER% NEQ msvc set VC_BUILD=rem
