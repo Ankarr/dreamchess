@@ -1,16 +1,15 @@
 os: Visual Studio 2017
 environment:
+  VC_PREFIX: C:\vc-libs
+  MSYS2_PREFIX: C:\msys2-libs
   matrix:
     - COMPILER: msvc
-      VC_PREFIX: C:\vc-libs
     - COMPILER: msys2
-      MSYS2_PREFIX: C:\msys2-libs
-      MSYS2_PACMAN: C:\msys64\var\cache\pacman\pkg
       MSYS2_BASH: C:\msys64\usr\bin\bash -lc
 cache:
   - '%VC_PREFIX%'
   - '%MSYS2_PREFIX%'
-  - '%MSYS2_PACMAN%'
+  - C:\msys64\var\cache\pacman\pkg
 install:
   - |-
     if %COMPILER% NEQ msvc set VC_BUILD=rem
@@ -75,13 +74,16 @@ install:
   # MSYS2
   - |-
     %MSYS2_BUILD% %MSYS2_BASH% "pacman -Syu --noconfirm"
+    %MSYS2_BUILD% %MSYS2_BASH% "pacman -S --needed --noconfirm cmake flex bison"
+    %MSYS2_BUILD% %MSYS2_BASH% "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain mingw-w64-x86_64-SDL mingw-w64-x86_64-SDL_image mingw-w64-x86_64-SDL_mixer mingw-w64-x86_64-glew"
 build_script:
   # Visual Studio
   - |-
-    %VC_BUILD% mkdir %APPVEYOR_BUILD_FOLDER%\build
-    %VC_BUILD% cd %APPVEYOR_BUILD_FOLDER%\build
+    mkdir %APPVEYOR_BUILD_FOLDER%\build
+    cd %APPVEYOR_BUILD_FOLDER%\build
     %VC_BUILD% cmake -DCMAKE_PREFIX_PATH=%VC_PREFIX% -DCMAKE_PROGRAM_PATH=%VC_PREFIX%\win_flex_bison ..
-    %VC_BUILD% cmake --build . --config Release
+    %MSYS2_BUILD% cmake ..
+    cmake --build . --config ReleaseWithDebInfo
   # MSYS2
   - |-
     %MSYS2_BUILD% echo "MSYS2 build here"
