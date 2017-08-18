@@ -83,7 +83,7 @@ build_script:
     cd %APPVEYOR_BUILD_FOLDER%\build
     %VC_BUILD% cmake -DCMAKE_PREFIX_PATH=%VC_PREFIX% -DCMAKE_PROGRAM_PATH=%VC_PREFIX%\win_flex_bison ..
     %MSYS2_BUILD% cmake ..
-    cmake --build . --config ReleaseWithDebInfo
+    cmake --build . --config Release
   # MSYS2
   - |-
     %MSYS2_BUILD% echo "MSYS2 build here"
