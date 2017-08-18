@@ -73,9 +73,11 @@ install:
     %VC_DEPENDS% copy mxml-2.10\vcnet\*.dll %VC_PREFIX%\bin > nul
   # MSYS2
   - |-
-    %MSYS2_BUILD% %MSYS2_BASH% "pacman -Syu --noconfirm"
+    %MSYS2_BUILD% %MSYS2_BASH% "pacman -Syu --noconfirm pacman pacman-mirrors"
     %MSYS2_BUILD% %MSYS2_BASH% "pacman -S --needed --noconfirm flex bison"
     %MSYS2_BUILD% %MSYS2_BASH% "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain mingw-w64-x86_64-cmake mingw-w64-x86_64-SDL mingw-w64-x86_64-SDL_image mingw-w64-x86_64-SDL_mixer mingw-w64-x86_64-glew"
+  # Temporary fix for missing cmake dep
+  - %MSYS2_BUILD% %MSYS2_BASH% "pacman -S --needed --noconfirm mingw-w64-x86_64-libidn2"
 build_script:
   - |-
     mkdir %APPVEYOR_BUILD_FOLDER%\build
@@ -86,4 +88,4 @@ build_script:
     %VC_BUILD% cmake --build . --config Release
   # MSYS2
   - |-
-    %MSYS2_BUILD% %MSYS2_BASH% "MSYSTEM=MINGW64 . /etc/profile && cd '%cd%' && cmake -G 'MSYS Makefiles' .. && make"
+    %MSYS2_BUILD% %MSYS2_BASH% "cd '%cd%' && cmake -G 'MSYS Makefiles' .. && make"
