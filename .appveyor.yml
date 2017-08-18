@@ -1,10 +1,9 @@
 image: Visual Studio 2017
 environment:
+  PREFIX: C:\Libraries
   matrix:
     - COMPILER: msvc
-      PREFIX: C:\vc-libs
     - COMPILER: msys2
-      PREFIX: C:\msys2-libs
 cache:
   - '%PREFIX%'
 install:
@@ -13,16 +12,13 @@ install:
     if %COMPILER% NEQ msys2 set MSYS2=rem
     if exist %PREFIX% set DEP=rem
   - |-
+    %DEP% cd %TEMP%
+    %DEP% mkdir %PREFIX%\bin
+    %DEP% mkdir %PREFIX%\include\SDL
+    %DEP% mkdir %PREFIX%\include\GL
+    %DEP% mkdir %PREFIX%\lib
     %MSVC% %DEP% set DEVENV="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.exe"
-    %MSVC% %DEP% mkdir %PREFIX%\include\SDL
-    %MSVC% %DEP% mkdir %PREFIX%\include\GL
-    %MSVC% %DEP% mkdir %PREFIX%\lib
-    %MSVC% %DEP% mkdir %PREFIX%\bin
-    %MSVC% %DEP% cd %TEMP%
-  - |-
     %MSYS2% set MSYS2_BASH=C:\msys64\usr\bin\bash -lc
-    %MSYS2% %DEP% mkdir %PREFIX%\include
-    %MSYS2% %DEP% mkdir %PREFIX%\lib
   # flex / bison
   - |-
     %MSVC% %DEP% appveyor DownloadFile https://github.com/lexxmark/winflexbison/releases/download/v.2.4.9/win_flex_bison-2.4.9.zip
@@ -71,7 +67,7 @@ install:
   # MSYS2
   - |-
     %MSYS2% %MSYS2_BASH% "pacman -S --needed --noconfirm flex mingw-w64-x86_64-cmake mingw-w64-x86_64-SDL mingw-w64-x86_64-SDL_image mingw-w64-x86_64-SDL_mixer mingw-w64-x86_64-glew"
-  # Build mxml
+  # Mini-XML
   - |-
     %MSYS2% %DEP% appveyor DownloadFile https://github.com/michaelrsweet/mxml/releases/download/release-2.10/mxml-2.10.tar.gz
     %MSYS2% %DEP% 7z x mxml-2.10.tar.gz > nul
