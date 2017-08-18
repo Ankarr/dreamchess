@@ -26,6 +26,9 @@ install:
     %VC_DEPENDS% mkdir %VC_PREFIX%\lib
     %VC_DEPENDS% mkdir %VC_PREFIX%\bin
     %VC_DEPENDS% cd %TEMP%
+  - |-
+    %MSYS2_DEPENDS% mkdir %MSYS2_PREFIX%\include
+    %MSYS2_DEPENDS% mkdir %MSYS2_PREFIX%\lib
   # flex / bison
   - |-
     %VC_DEPENDS% appveyor DownloadFile https://github.com/lexxmark/winflexbison/releases/download/v.2.4.9/win_flex_bison-2.4.9.zip
@@ -79,6 +82,14 @@ install:
   # Temporary fix for missing cmake dep
   - |-
     %MSYS2_BUILD% %MSYS2_BASH% "pacman -S --needed --noconfirm mingw-w64-x86_64-libidn2"
+  # Build mxml
+  - |-
+    %MSYS2_DEPENDS% appveyor DownloadFile https://github.com/michaelrsweet/mxml/releases/download/release-2.10/mxml-2.10.tar.gz
+    %MSYS2_DEPENDS% 7z x mxml-2.10.tar.gz > nul
+    %MSYS2_DEPENDS% 7z x mxml-2.10.tar > nul
+    %MSYS2_DEPENDS% %MSYS2_BASH% "MSYSTEM=MINGW64 . /etc/profile && cd '%CD%'/mxml-2.10 && ./configure && make libmxml.a"
+    %MSYS2_DEPENDS% copy mxml-2.10\mxml.h %MSYS2_PREFIX%\include > nul
+    %MSYS2_DEPENDS% copy mxml-2.10\libmxml.a %MSYS2_PREFIX%\lib > nul
 build_script:
   - |-
     mkdir %APPVEYOR_BUILD_FOLDER%\build
@@ -89,4 +100,4 @@ build_script:
     %VC_BUILD% cmake --build . --config Release
   # MSYS2
   - |-
-    %MSYS2_BUILD% %MSYS2_BASH% "MSYSTEM=MINGW64 . /etc/profile && cd '%cd%' && cmake -G 'MSYS Makefiles' .. && make"
+    %MSYS2_BUILD% %MSYS2_BASH% "MSYSTEM=MINGW64 . /etc/profile && cd '%CD%' && cmake -DCMAKE_PREFIX_PATH=%MSYS2_PREFIX% -G'MSYS Makefiles' .. && make"
