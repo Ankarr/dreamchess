@@ -77,12 +77,13 @@ install:
     %MSYS2_BUILD% %MSYS2_BASH% "pacman -S --needed --noconfirm flex bison"
     %MSYS2_BUILD% %MSYS2_BASH% "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain mingw-w64-x86_64-cmake mingw-w64-x86_64-SDL mingw-w64-x86_64-SDL_image mingw-w64-x86_64-SDL_mixer mingw-w64-x86_64-glew"
 build_script:
-  - mkdir %APPVEYOR_BUILD_FOLDER%\build
+  - |-
+    mkdir %APPVEYOR_BUILD_FOLDER%\build
+    cd %APPVEYOR_BUILD_FOLDER%\build
   # Visual Studio
   - |-
-    %VC_BUILD% cd %APPVEYOR_BUILD_FOLDER%\build
     %VC_BUILD% cmake -DCMAKE_PREFIX_PATH=%VC_PREFIX% -DCMAKE_PROGRAM_PATH=%VC_PREFIX%\win_flex_bison ..
     %VC_BUILD% cmake --build . --config Release
   # MSYS2
   - |-
-    %MSYS2_BUILD% %MSYS2_BASH% "cd $APPVEYOR_BUILD_FOLDER/build && /mingw64/bin/cmake -G 'MSYS Makefiles' .. && make"
+    %MSYS2_BUILD% %MSYS2_BASH% "MSYSTEM=MINGW64 . /etc/profile && cd '%cd%' && cmake -G 'MSYS Makefiles' .. && make"
