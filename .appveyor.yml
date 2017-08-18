@@ -74,11 +74,10 @@ install:
   # MSYS2
   - |-
     %MSYS2_BUILD% %MSYS2_BASH% "pacman -Syu --noconfirm"
-    %MSYS2_BUILD% %MSYS2_BASH% "pacman -S --needed --noconfirm cmake flex bison"
-    %MSYS2_BUILD% %MSYS2_BASH% "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain mingw-w64-x86_64-SDL mingw-w64-x86_64-SDL_image mingw-w64-x86_64-SDL_mixer mingw-w64-x86_64-glew"
+    %MSYS2_BUILD% %MSYS2_BASH% "pacman -S --needed --noconfirm flex bison"
+    %MSYS2_BUILD% %MSYS2_BASH% "pacman -S --needed --noconfirm mingw-w64-x86_64-toolchain mingw-w64-x86_64-cmake mingw-w64-x86_64-SDL mingw-w64-x86_64-SDL_image mingw-w64-x86_64-SDL_mixer mingw-w64-x86_64-glew"
 build_script:
-  - |-
-    mkdir %APPVEYOR_BUILD_FOLDER%\build
+  - mkdir %APPVEYOR_BUILD_FOLDER%\build
   # Visual Studio
   - |-
     %VC_BUILD% cd %APPVEYOR_BUILD_FOLDER%\build
