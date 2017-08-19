@@ -25,7 +25,7 @@ install:
     %DEP% mkdir %PREFIX%\include\GL
     %DEP% mkdir %PREFIX%\lib
     %MSVC% %DEP% set DEVENV="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.exe"
-    %MSVC% if %PLATFORM%==x86 (set WIN_PLATFORM=Win32) else set WIN_PLATFORM=%PLATFORM%
+    if %PLATFORM%==x86 (%MSVC% set WIN_PLATFORM=Win32) else %MSVC% set WIN_PLATFORM=%PLATFORM%
     %MSYS2% set MSYS2_BASH=C:\msys64\usr\bin\bash -lc
   # flex / bison
   - |-
@@ -89,7 +89,7 @@ before_build:
     cd %APPVEYOR_BUILD_FOLDER%\build
   # Visual Studio
   - |-
-    %MSVC% if %PLATFORM%==x64 set GENERATOR_APPEND= Win64
+    if %PLATFORM%==x64 %MSVC% set GENERATOR_APPEND= Win64
     %MSVC% cmake -G'Visual Studio 15 2017%GENERATOR_APPEND%' -DCMAKE_PREFIX_PATH=%PREFIX% -DCMAKE_PROGRAM_PATH=%PREFIX%\win_flex_bison ..
   # MSYS2
   - |-
