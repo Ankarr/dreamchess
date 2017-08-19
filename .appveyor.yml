@@ -1,6 +1,6 @@
 image: Visual Studio 2017
 environment:
-  PREFIX: C:\Libraries
+  PREFIX: C:\Deps
   matrix:
     - COMPILER: msvc
     - COMPILER: msys2
