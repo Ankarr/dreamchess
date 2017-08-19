@@ -25,6 +25,7 @@ install:
     %DEP% mkdir %PREFIX%\include\GL
     %DEP% mkdir %PREFIX%\lib
     %MSVC% %DEP% set DEVENV="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.exe"
+    %MSVC% if %PLATFORM%==x86 (set WIN_PLATFORM=Win32) else set WIN_PLATFORM=%PLATFORM%
     %MSYS2% set MSYS2_BASH=C:\msys64\usr\bin\bash -lc
   # flex / bison
   - |-
@@ -35,7 +36,7 @@ install:
     %MSVC% %DEP% appveyor DownloadFile https://www.libsdl.org/release/SDL-1.2.15.zip
     %MSVC% %DEP% 7z x SDL-1.2.15.zip > nul
     %MSVC% %DEP% %DEVENV% /Upgrade SDL-1.2.15\VisualC\SDL.sln
-    %MSVC% %DEP% msbuild SDL-1.2.15\VisualC\SDL.sln /p:TargetPlatformVersion=10.0.14393.0 /p:Configuration=Release
+    %MSVC% %DEP% msbuild SDL-1.2.15\VisualC\SDL.sln /p:TargetPlatformVersion=10.0.14393.0 /p:Configuration=Release /p:Platform=%WIN_PLATFORM%
     %MSVC% %DEP% copy SDL-1.2.15\include\* %PREFIX%\include\SDL > nul
     %MSVC% %DEP% copy SDL-1.2.15\VisualC\SDLmain\Release\*.lib %PREFIX%\lib > nul
     %MSVC% %DEP% copy SDL-1.2.15\VisualC\Release\*.lib %PREFIX%\lib > nul
@@ -59,9 +60,8 @@ install:
     %MSVC% %DEP% appveyor DownloadFile https://github.com/nigels-com/glew/releases/download/glew-2.0.0/glew-2.0.0-win32.zip
     %MSVC% %DEP% 7z x glew-2.0.0-win32.zip > nul
     %MSVC% %DEP% copy glew-2.0.0\include\GL\* %PREFIX%\include\GL > nul
-    %MSVC% %DEP% if %PLATFORM%==x86 (set GLEW_PLATFORM=Win32) else set GLEW_PLATFORM=%PLATFORM%
-    %MSVC% %DEP% copy glew-2.0.0\lib\Release\%GLEW_PLATFORM%\*.lib %PREFIX%\lib > nul
-    %MSVC% %DEP% copy glew-2.0.0\bin\Release\%GLEW_PLATFORM%\*.dll %PREFIX%\bin > nul
+    %MSVC% %DEP% copy glew-2.0.0\lib\Release\%WIN_PLATFORM%\*.lib %PREFIX%\lib > nul
+    %MSVC% %DEP% copy glew-2.0.0\bin\Release\%WIN_PLATFORM%\*.dll %PREFIX%\bin > nul
   # Mini-XML
   - |-
     %MSVC% %DEP% appveyor DownloadFile https://github.com/michaelrsweet/mxml/releases/download/release-2.10/mxml-2.10.tar.gz
