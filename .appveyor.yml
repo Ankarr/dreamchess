@@ -18,6 +18,8 @@ install:
     if %COMPILER% NEQ msvc set MSVC=rem
     if %COMPILER% NEQ msys2 set MSYS2=rem
     if exist %PREFIX% set DEP=rem
+    if %PLATFORM%==x86 (set WIN_PLATFORM=Win32) else set WIN_PLATFORM=%PLATFORM%
+    if %WIN_PLATFORM%==x64 set WIN_SDL_PLATFORM=%WIN_PLATFORM%
   - |-
     %DEP% cd %TEMP%
     %DEP% mkdir %PREFIX%\bin
@@ -25,7 +27,6 @@ install:
     %DEP% mkdir %PREFIX%\include\GL
     %DEP% mkdir %PREFIX%\lib
     %MSVC% %DEP% set DEVENV="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\Common7\IDE\devenv.exe"
-    if %PLATFORM%==x86 (%MSVC% set WIN_PLATFORM=Win32) else %MSVC% set WIN_PLATFORM=%PLATFORM%
     %MSYS2% set MSYS2_BASH=C:\msys64\usr\bin\bash -lc
   # flex / bison
   - |-
@@ -38,9 +39,8 @@ install:
     %MSVC% %DEP% %DEVENV% /Upgrade SDL-1.2.15\VisualC\SDL.sln
     %MSVC% %DEP% msbuild SDL-1.2.15\VisualC\SDL.sln /p:TargetPlatformVersion=10.0.14393.0 /p:Configuration=Release /p:Platform=%WIN_PLATFORM%
     %MSVC% %DEP% copy SDL-1.2.15\include\* %PREFIX%\include\SDL > nul
-    if %WIN_PLATFORM%==x64 %MSVC% set SDL_PLATFORM=%WIN_PLATFORM%
-    %MSVC% %DEP% copy SDL-1.2.15\VisualC\SDLmain\%SDL_PLATFORM%\Release\*.lib %PREFIX%\lib > nul
-    %MSVC% %DEP% copy SDL-1.2.15\VisualC\%SDL_PLATFORM%\Release\*.lib %PREFIX%\lib > nul
+    %MSVC% %DEP% copy SDL-1.2.15\VisualC\SDLmain\%WIN_SDL_PLATFORM%\Release\*.lib %PREFIX%\lib > nul
+    %MSVC% %DEP% copy SDL-1.2.15\VisualC\%WIN_SDL_PLATFORM%\Release\*.lib %PREFIX%\lib > nul
     %MSVC% %DEP% copy SDL-1.2.15\VisualC\SDL\Release\*.dll %PREFIX%\bin > nul
   # SDL_image
   - |-
@@ -91,7 +91,7 @@ before_build:
   # Visual Studio
   - |-
     if %PLATFORM%==x64 %MSVC% set GENERATOR_APPEND= Win64
-    %MSVC% cmake -G'Visual Studio 15 2017%GENERATOR_APPEND%' -DCMAKE_PREFIX_PATH=%PREFIX% -DCMAKE_PROGRAM_PATH=%PREFIX%\win_flex_bison ..
+    %MSVC% cmake -G"Visual Studio 15 2017%GENERATOR_APPEND%" -DCMAKE_PREFIX_PATH=%PREFIX% -DCMAKE_PROGRAM_PATH=%PREFIX%\win_flex_bison ..
   # MSYS2
   - |-
     %MSYS2% %MSYS2_BASH% "MSYSTEM=MINGW64 . /etc/profile && cd '%CD%' && cmake -DCMAKE_PREFIX_PATH='%PREFIX%' -G'MSYS Makefiles' .."
